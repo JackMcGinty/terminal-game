@@ -1,5 +1,5 @@
 pub mod test {
-    use crate::surface::surface::Surface;
+    use crate::surface::surface::{Surface, blit};
     use crate::surface::surface::{
         Clear, Fill, Display, DrawChar
     };
@@ -9,9 +9,8 @@ pub mod test {
     pub fn run_tests() {
         println!("=============== TESTING ================");
         // change this for testing conditions
-        screen_test();
+        surface_test();
         println!("========== TESTING COMPLETE ============");
-
     }
 
     fn coordinate_test() {
@@ -20,40 +19,30 @@ pub mod test {
         println!("moving to (8, 10)");
         test_coord.reposition(8, 10);
         println!("the point is at: {}", test_coord);
-    
+        
     }
 
     fn surface_test() {
         println!(" == testing Surface == ");
-        let mut test_surface = Surface::new(4, 4, '*');
-        println!("original surface");
-        test_surface.display();
-        println!("attempting to change (0, 0) to a");
-        test_surface.draw_char(Coordinate::new(0, 0), 'a');
-        test_surface.display();
-        println!("attempting to change (3, 3) to b");
-        test_surface.draw_char(Coordinate::new(3, 3), 'b');
-        test_surface.display();
-        // now the tricky bit
-        println!("attempting to change (3, 0) to c");
-        test_surface.draw_char(Coordinate::new(3, 0), 'c');
-        test_surface.display();
-        println!("attempting to change (1, 2) to d");
-        test_surface.draw_char(Coordinate::new(1, 2), 'd');
-        test_surface.display();
-        println!("attempting to change an invalid coordinate ((6, 4) in this case) to e\nsurface should be unchanged");
-        test_surface.draw_char(Coordinate::new(6, 4), 'e');
-        test_surface.display();
-        
+        // time for some blit testing
+        let mut surf_a = Surface::new(8, 4, 'a');
+        let surf_b = Surface::new(4, 2, 'b');
+        println!("surface a:");
+        surf_a.display();
+        println!("surface b:");
+        surf_b.display();
+        println!("attempting to blit b to a at (6, 1)");
+        blit(surf_b, &mut surf_a, Coordinate::new(6, 1));
+        surf_a.display();
         println!(" == end of Surface tests == ")
     }
 
     fn screen_test() {
         println!(" == testing Screen ==");
         let mut test_screen = Screen::new();
-        test_screen.fill('&');
+        test_screen.draw_char(Coordinate::new(5, 8), '#');
         test_screen.display();
-        println!("== end of Screen tests == ")
+        println!("== end of Screen tests == ");
     }
 }
 
