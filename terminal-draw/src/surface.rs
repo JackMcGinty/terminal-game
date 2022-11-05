@@ -27,6 +27,10 @@ pub mod surface {
     pub trait Display {
         fn display(&self);
     }
+    // write some text to the surface (useful for HUDs, menus, and so forth)
+    pub trait Write {
+        fn write(&mut self, source: String, dest: Coordinate);
+    }
 // There's also new() as a shared behavior but it is defined differently
 //  so I can't really have it as a trait.
 
@@ -124,6 +128,18 @@ pub mod surface {
                 }
                 // we need to go down a line after we are done
                 print!("\n");
+            }
+        }
+    }
+
+    // write some text to the surface
+    impl Write for Surface {
+        fn write(&mut self, source: String, dest: Coordinate) {
+            let mut i: u32 = 0;
+            for char in source.chars() {
+                // if we go out of bounds, draw_char won't change the surface.
+                self.draw_char(Coordinate::new(dest.x + i, dest.y), char);
+                i += 1;
             }
         }
     }

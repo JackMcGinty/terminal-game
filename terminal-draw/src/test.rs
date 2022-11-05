@@ -1,5 +1,5 @@
 pub mod test {
-    use crate::surface::surface::{Surface, blit};
+    use crate::surface::surface::{Surface, blit, Write};
     use crate::surface::surface::{
         Clear, Fill, Display, DrawChar
     };
@@ -24,16 +24,13 @@ pub mod test {
 
     fn surface_test() {
         println!(" == testing Surface == ");
-        // time for some blit testing
-        let mut surf_a = Surface::new(8, 4, 'a');
-        let surf_b = Surface::new(4, 2, 'b');
-        println!("surface a:");
-        surf_a.display();
-        println!("surface b:");
-        surf_b.display();
-        println!("attempting to blit b to a at (6, 1)");
-        blit(surf_b, &mut surf_a, Coordinate::new(6, 1));
-        surf_a.display();
+        // write method!
+        let mut test_surf = Surface::new(16, 8, '@');
+        println!("surface: ");
+        test_surf.display();
+        println!("attempting to write the gettysburg address to the surface @ (1, 5)");
+        test_surf.write("Four score and seven years ago our father brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.".to_string(), Coordinate::new(1, 5));
+        test_surf.display();
         println!(" == end of Surface tests == ")
     }
 
@@ -54,5 +51,7 @@ pub mod test {
         - filling and clearing... check
         - changing one valid coordinate... check
         - screen displays at the right size... check
+        - surface blitting... check
+        - writing text to surface... check
     ... add more as necessary
 */

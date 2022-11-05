@@ -2,7 +2,7 @@ pub mod screen {
     // borrow traits from the suface file
     use crate::surface::surface::{
         Clear, Fill, DrawChar, 
-        Display, VerifyPoint
+        Display, VerifyPoint, Write
     };
     // we also need the Surface class
     use crate::surface::surface::Surface;
@@ -59,6 +59,11 @@ pub mod screen {
             self.surf.verify_point(test_point) // no ; because we are returning
         }
     }
+    impl Write for Screen {
+        fn write(&mut self, source: String, dest: crate::coordinate::coordinate::Coordinate) {
+            self.surf.write(source, dest);
+        }
+    }
     impl Display for Screen {
         fn display(&self) {
             // first clear and go to the top left of the screen
@@ -70,5 +75,4 @@ pub mod screen {
             self.surf.display();
         }
     }
-
 }
