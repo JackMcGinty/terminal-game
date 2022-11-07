@@ -1,6 +1,7 @@
 pub mod coordinate {
     use std::fmt;
 
+    #[derive(Copy, Clone)]
     pub struct Coordinate {
         pub x: u32,
         pub y: u32,

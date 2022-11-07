@@ -31,6 +31,11 @@ pub mod surface {
     pub trait Write {
         fn write(&mut self, source: String, dest: Coordinate);
     }
+    // draw a line from point a to point b
+    pub trait DrawLine {
+        fn draw_line(&mut self, a: Coordinate, b: Coordinate, line_char: char);
+    }
+
 // There's also new() as a shared behavior but it is defined differently
 //  so I can't really have it as a trait.
 
@@ -142,6 +147,53 @@ pub mod surface {
                 i += 1;
             }
         }
+    }
+
+    impl DrawLine for Surface {
+        fn draw_line(&mut self, a: Coordinate, b: Coordinate, line_char: char) {
+            let mut working_a: Coordinate;
+            let mut working_b: Coordinate;
+            // this was the best way I could find to swap coordinates
+            if b.x < a.x {
+                working_a = b;
+                working_b = a;
+            }
+            else {
+                working_a = a;
+                working_b = b;
+            }
+            // check if we are vertical
+            if a.x == b.x {
+                // handle vertical line case
+                // first, make sure they are in the proper order
+                if b.y < a.y {
+                    working_a = b;
+                    working_b = a;
+                }
+                for i in working_a.y..working_b.y {
+                    self.draw_char(Coordinate::new(a.x, i), line_char);
+                }
+                return
+            }
+            // get our slope
+            //                          All this casting is necessary because one or both of these values could (and in
+            //                              in some circumstances, should) be negative. Obviously, an unsigned value
+            //                              doesn't allow for this, so we temporarily convert to a signed integer.
+            let m: f64 = (working_a.y as f64 - working_b.y as f64) / (working_a.x as f64 - working_b.x as f64);
+            println!("slope: {}", m);
+            // y coordinate needs to be remembered as a floating point number
+            let mut target_y: f64 = working_a.y.into();
+            // this is where the magic happens:
+            //  we draw a char at the target point and then increase the x value by 1 and 
+            //  increase (or decrease, depending on the sign) the y value by the slope 
+            for i in working_a.x..working_b.x+1 {
+                //     this has to be rounded in a non-truncating way \/
+                self.draw_char(Coordinate::new(i, target_y as u32), line_char);
+                target_y += m;
+                println!("target_y: {}", target_y);
+            }
+        }
+
     }
 
 
