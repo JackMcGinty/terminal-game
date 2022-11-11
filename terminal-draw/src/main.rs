@@ -1,13 +1,13 @@
 // Just does testing
 
 // we still need our modules declared though
-mod coordinate;
 mod surface;
 mod screen;
-// testing module
-mod test;
-use test::test::run_tests;
+mod coordinate;
+
+mod pong;
 
 fn main() {
-    run_tests();
+    // run game::play() to start the game
+    pong::play();
 }

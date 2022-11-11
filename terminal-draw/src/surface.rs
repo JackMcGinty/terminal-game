@@ -1,5 +1,6 @@
 pub mod surface {
     use crate::coordinate::coordinate::Coordinate;
+    #[derive(Clone)]
     pub struct Surface {
         pub width: u32,
         pub height: u32,
@@ -106,15 +107,11 @@ pub mod surface {
     // verify a point (primarily for internal use)
     impl VerifyPoint for Surface {
         fn verify_point(&self, test_point: &Coordinate) -> bool {
-            // since test_point.x and .y are unsigned, they will 
-            //  never be negative.
-            //  i.e. the coordinate is always in-bounds from 
-            //  the top and left. I'd really like to say that I thought
-            //  of this but it was honestly an accident.
-            //  Also the fact that Rust detects this is absolutely
-            //  butt-kicking boss.
-            if ((self.width - 1) < test_point.x) || 
-                ((self.height - 1) < test_point.y) {
+            // had to change this so I can have negative coordinates
+
+            if (test_point.x < 0) || (test_point.y < 0) ||
+                (((self.width - 1) as i32) < test_point.x) || 
+                (((self.height - 1) as i32) < test_point.y) {
                 return false
             }
             // if we reach it this far, the coordinate must be valid
@@ -143,7 +140,7 @@ pub mod surface {
             let mut i: u32 = 0;
             for char in source.chars() {
                 // if we go out of bounds, draw_char won't change the surface.
-                self.draw_char(Coordinate::new(dest.x + i, dest.y), char);
+                self.draw_char(Coordinate::new(dest.x + (i as i32), dest.y), char);
                 i += 1;
             }
         }
@@ -188,7 +185,7 @@ pub mod surface {
             //  increase (or decrease, depending on the sign) the y value by the slope 
             for i in working_a.x..working_b.x+1 {
                 //     this has to be rounded in a non-truncating way \/
-                self.draw_char(Coordinate::new(i, target_y as u32), line_char);
+                self.draw_char(Coordinate::new(i, target_y as i32), line_char);
                 target_y += m;
                 println!("target_y: {}", target_y);
             }

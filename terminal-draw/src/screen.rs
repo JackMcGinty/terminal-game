@@ -4,6 +4,8 @@ pub mod screen {
         Clear, Fill, DrawChar, 
         Display, VerifyPoint, Write
     };
+    use std::io::Write as std_write;
+    use std::io::stdout;
     // we also need the Surface class
     use crate::surface::surface::Surface;
     // Termion will be helpful with input as well
@@ -13,9 +15,9 @@ pub mod screen {
     //  it is always the size of the screen
     //  and it's default character is always ' '.
     pub struct Screen {
-        surf: Surface,
-        width: u32,
-        height: u32,
+        pub surf: Surface,
+        pub width: u32,
+        pub height: u32,
     }
     impl Screen {
         // we need a constructor here...
@@ -68,11 +70,23 @@ pub mod screen {
         fn display(&self) {
             // first clear and go to the top left of the screen
             //  Thanks, Termion
-            print!("{}{}", termion::clear::All, termion::cursor::Goto(1, 1));
+            print!("{}{}{}", termion::clear::All, termion::cursor::Goto(1, 1), termion::cursor::Hide);
+            
             // why not (0, 0)? Something to do with ansii-escape codes
             // the screen is clear so now we call the surf display
             // maybe? I might need to change it
-            self.surf.display();
+            for row in 0..self.surf.contents.len() {
+                let mut current_row = String::new();
+                for col in 0..self.surf.contents[row].len() {
+                    current_row.push(self.surf.contents[row][col]);
+                }
+                print!("{}", current_row);
+                if row != self.surf.contents.len() - 1 {
+                    print!("\n");
+                }
+                stdout().flush().expect("couldn't flush display");
+            }
+            print!("{}", termion::cursor::Show);
         }
     }
 }

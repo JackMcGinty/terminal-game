@@ -3,18 +3,18 @@ pub mod coordinate {
 
     #[derive(Copy, Clone)]
     pub struct Coordinate {
-        pub x: u32,
-        pub y: u32,
+        pub x: i32,
+        pub y: i32,
     }
     impl Coordinate {
-        pub fn new(x: u32, y: u32) -> Self {
+        pub fn new(x: i32, y: i32) -> Self {
             Self {
                 x,
                 y,
             }
             
         }
-        pub fn reposition(&mut self, new_x: u32, new_y: u32) {
+        pub fn reposition(&mut self, new_x: i32, new_y: i32) {
             self.x = new_x;
             self.y = new_y;
         }
