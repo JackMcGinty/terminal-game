@@ -195,18 +195,22 @@ pub mod surface {
 
 
     pub fn blit(source: Surface, dest: &mut Surface, topleft: Coordinate) {
+        if !dest.verify_point(&topleft) {
+            // don't do anything
+            return
+        }
         // have to do some quick conversion here so that we can index vectors later
         let y_offset = usize::try_from(topleft.y).unwrap();
         let x_offset = usize::try_from(topleft.x).unwrap();
         for row in 0..source.contents.len() {
             for col in 0..source.contents[row].len() {
                 // to make sure we don't blit out of bounds
-                // leftward and topward bounds aren't a problem because coordinates are always positive
                 if dest.verify_point(&Coordinate::new(
                     (col + x_offset).try_into().unwrap(), 
                     (row + y_offset).try_into().unwrap()
                 )) {
-                    dest.contents[row + y_offset][col + x_offset] = source.contents[row][col];
+                    // dest.contents[row + y_offset][col + x_offset] = source.contents[row][col];
+                    dest.draw_char(Coordinate::new((col + x_offset).try_into().unwrap(), (row + y_offset).try_into().unwrap()), source.contents[row][col]);
                 }
             }
         }

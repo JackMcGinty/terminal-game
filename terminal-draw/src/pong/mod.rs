@@ -1,42 +1,61 @@
 mod game_classes;
 
-use crate::{screen::{self, screen::Screen}, surface::surface::{blit, Display, Write, DrawChar, VerifyPoint}, coordinate::coordinate::Coordinate};
+use crate::{screen::{self, screen::Screen}, surface::surface::{Display, Surface, Write}, coordinate::coordinate::Coordinate};
 
-use self::game_classes::ball::Ball;
+use self::game_classes::{ball::Ball, velocity::Velocity};
 use std::{thread, time};
 
 use crate::surface::surface::Clear;
 
+use rand::{self, Rng};
+
+extern crate termion;
+
 pub fn play() {
-    let mut demo_screen = screen::screen::Screen::new();
-    let mut demo_ball = Ball::new();
-    let mut i = 0;
+    let mut screen = screen::screen::Screen::new();
+    let mut ball_vec: Vec<Ball> = Vec::new();
+    for _i in 0..=rand::thread_rng().gen_range(1..9) {
+        let new_ball = Ball::new(random_position(screen.surf.clone()), random_velocity());
+        ball_vec.push(new_ball);
+    }
+    let thanks = false;
+    if thanks {
+        let mut word_surf = Surface::new(20, 1, '*');
+        word_surf.write("thanks for watching!".to_string(), Coordinate::new(0, 0));
+        let word_ball = Ball {
+            position: Coordinate::new(5, 5),
+            velocity: Velocity::new(2, 1),
+            surface: word_surf
+        };
+        ball_vec.push(word_ball);
+    }
     // game loop
+    let mut i = 0;
     loop {
-        i += 1;
-        demo_ball.draw(&mut demo_screen.surf);
+        // draw stuff
+        for i in 0..ball_vec.len() {
+            ball_vec[i].draw(&mut screen.surf);
+        }
         // screen clearing isn't working so well on non-vscode terminal, so this is here for backup
         std::process::Command::new("clear").status().expect("couldn't");
-        // debug
-        let ball_position_is_valid = demo_screen.surf.verify_point(&demo_ball.position);
-        demo_screen.write(format!("({},{}) i = {} valid position = {}", demo_ball.position.x, demo_ball.position.y, i, ball_position_is_valid).to_string(), Coordinate::new(0, 0));
-    
-        demo_screen.display();
-        demo_screen.clear();
-        demo_ball.apply_velocity();
-        keep_ball_on_screen(&mut demo_ball, &demo_screen);
+        
+        screen.display();
+        screen.clear();
+        for i in 0..ball_vec.len() {
+            ball_vec[i].apply_velocity();
+            keep_ball_on_screen(&mut ball_vec[i], &screen);
+        }
 
         // sleep
-        //  for a game this simple, this should be fine.
         thread::sleep(time::Duration::from_millis(75));
-        if i > 200 {
+        i += 1;
+        if i > 800 {
             break;
         }
     }
 }
 
 fn keep_ball_on_screen (ball: &mut Ball, screen: &Screen) {
-    // this will probably have to change to handle scoring
     // left bound
     if ball.position.x <= 0 && ball.velocity.x < 0 {
         ball.bounce(true, false);
@@ -54,4 +73,12 @@ fn keep_ball_on_screen (ball: &mut Ball, screen: &Screen) {
         ball.bounce(false, true);
     }
 
+}
+
+fn random_velocity () -> Velocity {
+    Velocity::new(rand::thread_rng().gen_range(-4..4), rand::thread_rng().gen_range(-2..2))
+}
+
+fn random_position (target_surf: Surface) -> Coordinate {
+    Coordinate::new(rand::thread_rng().gen_range(1..target_surf.width) as i32, rand::thread_rng().gen_range(1..target_surf.height) as i32)
 }

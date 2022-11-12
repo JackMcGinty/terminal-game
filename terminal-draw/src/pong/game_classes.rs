@@ -1,10 +1,10 @@
 pub mod paddle {
     use crate::{coordinate::coordinate::Coordinate, surface::surface::{Surface, blit}};
 
-    struct Paddle {
-        height: u32,
-        position: Coordinate,
-        surface: Surface,
+    pub struct Paddle {
+        pub height: u32,
+        pub position: Coordinate,
+        pub surface: Surface,
     }
     impl Paddle {
         pub fn new(height: u32, x_pos: i32, fill: char) -> Self {
@@ -17,6 +17,12 @@ pub mod paddle {
         pub fn draw(&self, dest_surf: &mut Surface) {
             blit(self.surface.clone(), dest_surf, self.position);
         }
+        pub fn move_up(&mut self) {
+            self.position.y -= 1;
+        }
+        pub fn move_down(&mut self) {
+            self.position.y += 1;
+        }
     }
 }
 
@@ -26,11 +32,10 @@ pub mod velocity {
         pub y: i32,
     }
     impl Velocity {
-        pub fn new() -> Self {
+        pub fn new(x: i32, y: i32) -> Self {
             Self {
-                // temporary
-                x: 2,
-                y: 1
+                x,
+                y
             }
         }
     }
@@ -54,12 +59,12 @@ pub mod ball {
         pub fn draw(&self, dest_surf: &mut Surface) {
             blit(self.surface.clone(), dest_surf, self.position);
         }
-        pub fn new() -> Self {
+        pub fn new(starting_position: Coordinate, starting_velocity: Velocity) -> Self {
             let mut new_surface = Surface::new(2, 1, '(');
             new_surface.draw_char(Coordinate::new(1, 0), ')');
             Self {
-                position: Coordinate::new(0, 0),
-                velocity: Velocity::new(),
+                position: starting_position,
+                velocity: starting_velocity,
                 surface: new_surface,
             }
         }
