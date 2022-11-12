@@ -5,9 +5,9 @@ mod surface;
 mod screen;
 mod coordinate;
 
-mod pong;
+mod demo;
 
 fn main() {
     // run game::play() to start the game
-    pong::play();
+    demo::play();
 }
