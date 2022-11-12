@@ -14,7 +14,7 @@ I chose Rust as my language to write the engine in because it is really fast and
 
 {Provide a link to your YouTube demonstration.  It should be a 4-5 minute demo of the software running and a walkthrough of the code.}
 
-[Software Demo Video](http://youtube.link.goes.here) &*()%%^%(&) Update this!!!! <-----
+[Software Demo Video](https://youtu.be/JB4zND8rSRE)
 
 ## Development Environment
 
