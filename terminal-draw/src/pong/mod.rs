@@ -18,7 +18,7 @@ pub fn play() {
         let new_ball = Ball::new(random_position(screen.surf.clone()), random_velocity());
         ball_vec.push(new_ball);
     }
-    let thanks = false;
+    let thanks = true;
     if thanks {
         let mut word_surf = Surface::new(20, 1, '*');
         word_surf.write("thanks for watching!".to_string(), Coordinate::new(0, 0));
