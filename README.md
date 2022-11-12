@@ -12,8 +12,6 @@ There is a reason that I am not an art major (i.e. I suck at art).
 Therefore, when I first got the idea for a terminal-based engine, I was intrigued. I said to myself, "Here is a way to make games without having to do art or graphic design. Just make the main character a 'W' or something, build some walls out of '|', '+', and '-', and you've got a neat little top-down dungeon crawler." 
 I chose Rust as my language to write the engine in because it is really fast and I didn't want the performance of games being dragged down by a slow method of drawing the frames.
 
-{Provide a link to your YouTube demonstration.  It should be a 4-5 minute demo of the software running and a walkthrough of the code.}
-
 [Software Demo Video](https://youtu.be/JB4zND8rSRE)
 
 ## Development Environment
