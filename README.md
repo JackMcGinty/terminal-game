@@ -8,7 +8,7 @@ This sprint, I was trying to write a graphics library for a terminal-based game 
 Although the graphics library works pretty well (If I say it myself), lacking the ability to obtain input from the user puts a bit of a damper on the possibilities of video games, so I looked into some fine `println!()` of the goal I set for myself and decided that I could fulfill it adequately by showing off some little ball-like shapes bouncing around the screen with randomly set positions and velocities.
 
 I've always been interested in making video games, but I haven't been able to make them as frequently as I want to because I am not good at graphic design. 
-There is a reason that I am not an art major (i.e. I suck at art).
+There is a reason that I am not an art major (i.e. I'm bad at art).
 Therefore, when I first got the idea for a terminal-based engine, I was intrigued. I said to myself, "Here is a way to make games without having to do art or graphic design. Just make the main character a 'W' or something, build some walls out of '|', '+', and '-', and you've got a neat little top-down dungeon crawler." 
 I chose Rust as my language to write the engine in because it is really fast and I didn't want the performance of games being dragged down by a slow method of drawing the frames.
 
